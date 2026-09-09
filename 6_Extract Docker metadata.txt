@@ -1,0 +1,93 @@
+﻿2025-08-22T01:32:31.0636658Z ##[group]Run docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934
+2025-08-22T01:32:31.0637306Z with:
+2025-08-22T01:32:31.0637664Z   images: ghcr.io/satashi-labs/designed-eureka
+2025-08-22T01:32:31.0638121Z   context: workflow
+2025-08-22T01:32:31.0638640Z   github-token: ***
+2025-08-22T01:32:31.0638943Z env:
+2025-08-22T01:32:31.0639211Z   REGISTRY: ghcr.io
+2025-08-22T01:32:31.0639562Z   IMAGE_NAME: satashi-labs/designed-eureka
+2025-08-22T01:32:31.0639986Z ##[endgroup]
+2025-08-22T01:32:31.5582548Z ##[group]Context info
+2025-08-22T01:32:31.5584258Z eventName: push
+2025-08-22T01:32:31.5585006Z sha: ac68e331cd04ab6e733dc111af3a92c20fef429f
+2025-08-22T01:32:31.5585497Z ref: refs/heads/main
+2025-08-22T01:32:31.5586439Z workflow: Docker
+2025-08-22T01:32:31.5586757Z action: meta
+2025-08-22T01:32:31.5587054Z actor: satashi-labs
+2025-08-22T01:32:31.5587366Z runNumber: 3
+2025-08-22T01:32:31.5587715Z runId: 17143505327
+2025-08-22T01:32:31.5591183Z ##[endgroup]
+2025-08-22T01:32:31.5594868Z ##[group]Processing images input
+2025-08-22T01:32:31.5595985Z name=ghcr.io/satashi-labs/designed-eureka,enable=true
+2025-08-22T01:32:31.5597227Z ##[endgroup]
+2025-08-22T01:32:31.5610508Z ##[group]Processing tags input
+2025-08-22T01:32:31.5611330Z type=schedule,pattern=nightly,enable=true,priority=1000
+2025-08-22T01:32:31.5613248Z type=ref,event=branch,enable=true,priority=600
+2025-08-22T01:32:31.5613811Z type=ref,event=tag,enable=true,priority=600
+2025-08-22T01:32:31.5614360Z type=ref,event=pr,prefix=pr-,enable=true,priority=600
+2025-08-22T01:32:31.5617056Z ##[endgroup]
+2025-08-22T01:32:31.5617679Z ##[group]Processing flavor input
+2025-08-22T01:32:31.5618075Z latest=auto
+2025-08-22T01:32:31.5618364Z prefix=
+2025-08-22T01:32:31.5618641Z prefixLatest=false
+2025-08-22T01:32:31.5618944Z suffix=
+2025-08-22T01:32:31.5619221Z suffixLatest=false
+2025-08-22T01:32:31.5619777Z ##[endgroup]
+2025-08-22T01:32:31.5672825Z ##[group]Docker image version
+2025-08-22T01:32:31.5677309Z main
+2025-08-22T01:32:31.5681910Z ##[endgroup]
+2025-08-22T01:32:31.5686472Z ##[group]Docker tags
+2025-08-22T01:32:31.5686904Z ghcr.io/satashi-labs/designed-eureka:main
+2025-08-22T01:32:31.5687726Z ##[endgroup]
+2025-08-22T01:32:31.5801055Z ##[group]Docker labels
+2025-08-22T01:32:31.5801704Z org.opencontainers.image.created=2025-08-22T01:32:31.561Z
+2025-08-22T01:32:31.5805248Z org.opencontainers.image.description=quantum coin continuous cash element creation
+2025-08-22T01:32:31.5806320Z org.opencontainers.image.licenses=EPL-2.0
+2025-08-22T01:32:31.5807534Z org.opencontainers.image.revision=ac68e331cd04ab6e733dc111af3a92c20fef429f
+2025-08-22T01:32:31.5808518Z org.opencontainers.image.source=https://github.com/satashi-labs/designed-eureka
+2025-08-22T01:32:31.5809322Z org.opencontainers.image.title=designed-eureka
+2025-08-22T01:32:31.5810067Z org.opencontainers.image.url=https://github.com/satashi-labs/designed-eureka
+2025-08-22T01:32:31.5810816Z org.opencontainers.image.version=main
+2025-08-22T01:32:31.5811517Z ##[endgroup]
+2025-08-22T01:32:31.5812341Z ##[group]JSON output
+2025-08-22T01:32:31.5813723Z {
+2025-08-22T01:32:31.5814010Z   "tags": [
+2025-08-22T01:32:31.5832173Z     "ghcr.io/satashi-labs/designed-eureka:main"
+2025-08-22T01:32:31.5832624Z   ],
+2025-08-22T01:32:31.5832864Z   "labels": {
+2025-08-22T01:32:31.5833295Z     "org.opencontainers.image.created": "2025-08-22T01:32:31.561Z",
+2025-08-22T01:32:31.5834080Z     "org.opencontainers.image.description": "quantum coin continuous cash element creation",
+2025-08-22T01:32:31.5834807Z     "org.opencontainers.image.licenses": "EPL-2.0",
+2025-08-22T01:32:31.5835486Z     "org.opencontainers.image.revision": "ac68e331cd04ab6e733dc111af3a92c20fef429f",
+2025-08-22T01:32:31.5836637Z     "org.opencontainers.image.source": "https://github.com/satashi-labs/designed-eureka",
+2025-08-22T01:32:31.5837385Z     "org.opencontainers.image.title": "designed-eureka",
+2025-08-22T01:32:31.5838065Z     "org.opencontainers.image.url": "https://github.com/satashi-labs/designed-eureka",
+2025-08-22T01:32:31.5838744Z     "org.opencontainers.image.version": "main"
+2025-08-22T01:32:31.5839437Z   }
+2025-08-22T01:32:31.5839677Z }
+2025-08-22T01:32:31.5840163Z ##[endgroup]
+2025-08-22T01:32:31.5840808Z ##[group]Bake file definition
+2025-08-22T01:32:31.5841140Z {
+2025-08-22T01:32:31.5841378Z   "target": {
+2025-08-22T01:32:31.5841666Z     "docker-metadata-action": {
+2025-08-22T01:32:31.5842006Z       "tags": [
+2025-08-22T01:32:31.5842336Z         "ghcr.io/satashi-labs/designed-eureka:main"
+2025-08-22T01:32:31.5842756Z       ],
+2025-08-22T01:32:31.5843003Z       "labels": {
+2025-08-22T01:32:31.5843434Z         "org.opencontainers.image.created": "2025-08-22T01:32:31.561Z",
+2025-08-22T01:32:31.5844244Z         "org.opencontainers.image.description": "quantum coin continuous cash element creation",
+2025-08-22T01:32:31.5845232Z         "org.opencontainers.image.licenses": "EPL-2.0",
+2025-08-22T01:32:31.5846074Z         "org.opencontainers.image.revision": "ac68e331cd04ab6e733dc111af3a92c20fef429f",
+2025-08-22T01:32:31.5847015Z         "org.opencontainers.image.source": "https://github.com/satashi-labs/designed-eureka",
+2025-08-22T01:32:31.5847779Z         "org.opencontainers.image.title": "designed-eureka",
+2025-08-22T01:32:31.5848490Z         "org.opencontainers.image.url": "https://github.com/satashi-labs/designed-eureka",
+2025-08-22T01:32:31.5849199Z         "org.opencontainers.image.version": "main"
+2025-08-22T01:32:31.5849622Z       },
+2025-08-22T01:32:31.5849874Z       "args": {
+2025-08-22T01:32:31.5850288Z         "DOCKER_META_IMAGES": "ghcr.io/satashi-labs/designed-eureka",
+2025-08-22T01:32:31.5850813Z         "DOCKER_META_VERSION": "main"
+2025-08-22T01:32:31.5851167Z       }
+2025-08-22T01:32:31.5851408Z     }
+2025-08-22T01:32:31.5851649Z   }
+2025-08-22T01:32:31.5851879Z }
+2025-08-22T01:32:31.5852350Z ##[endgroup]

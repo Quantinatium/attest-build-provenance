@@ -19,217 +19,30 @@ initiated.
 Attestations can be verified using the [`attestation` command in the GitHub
 CLI][5].
 
-See [Using artifact attestations to establish provenance for builds][9] for more
+See [Using artifact attestations to establish provenance for builds][6] for more
 information on artifact attestations.
+
+<!-- prettier-ignore-start -->
+> [!NOTE]
+> Artifact attestations are available in public repositories for all
+> current GitHub plans. They are not available on legacy plans, such as Bronze,
+> Silver, or Gold. If you are on a GitHub Free, GitHub Pro, or GitHub Team plan,
+> artifact attestations are only available for public repositories. To use
+> artifact attestations in private or internal repositories, you must be on a
+> GitHub Enterprise Cloud plan.
+<!-- prettier-ignore-end -->
 
 ## Usage
 
-Within the GitHub Actions workflow which builds some artifact you would like to
-attest:
+**As of version 4, `actions/attest-build-provenance` is simply a wrapper on top
+of [`actions/attest`][7].**
 
-1. Ensure that the following permissions are set:
+Existing applications may continue to use the `attest-build-provenance` action,
+but new implementations should use `actions/attest` instead. Please see the
+[`actions/attest`][7] repository for usage information.
 
-   ```yaml
-   permissions:
-     id-token: write
-     attestations: write
-   ```
-
-   The `id-token` permission gives the action the ability to mint the OIDC token
-   necessary to request a Sigstore signing certificate. The `attestations`
-   permission is necessary to persist the attestation.
-
-1. Add the following to your workflow after your artifact has been built:
-
-   ```yaml
-   - uses: actions/attest-build-provenance@v1
-     with:
-       subject-path: '<PATH TO ARTIFACT>'
-   ```
-
-   The `subject-path` parameter should identify the artifact for which you want
-   to generate an attestation.
-
-### Inputs
-
-See [action.yml](action.yml)
-
-```yaml
-- uses: actions/attest-build-provenance@v1
-  with:
-    # Path to the artifact serving as the subject of the attestation. Must
-    # specify exactly one of "subject-path" or "subject-digest". May contain a
-    # glob pattern or list of paths (total subject count cannot exceed 2500).
-    subject-path:
-
-    # SHA256 digest of the subject for the attestation. Must be in the form
-    # "sha256:hex_digest" (e.g. "sha256:abc123..."). Must specify exactly one
-    # of "subject-path" or "subject-digest".
-    subject-digest:
-
-    # Subject name as it should appear in the attestation. Required unless
-    # "subject-path" is specified, in which case it will be inferred from the
-    # path.
-    subject-name:
-
-    # Whether to push the attestation to the image registry. Requires that the
-    # "subject-name" parameter specify the fully-qualified image name and that
-    # the "subject-digest" parameter be specified. Defaults to false.
-    push-to-registry:
-
-    # The GitHub token used to make authenticated API requests. Default is
-    # ${{ github.token }}
-    github-token:
-```
-
-### Outputs
-
-<!-- markdownlint-disable MD013 -->
-
-| Name          | Description                                                    | Example                  |
-| ------------- | -------------------------------------------------------------- | ------------------------ |
-| `bundle-path` | Absolute path to the file containing the generated attestation | `/tmp/attestation.jsonl` |
-
-<!-- markdownlint-enable MD013 -->
-
-Attestations are saved in the JSON-serialized [Sigstore bundle][6] format.
-
-If multiple subjects are being attested at the same time, each attestation will
-be written to the output file on a separate line (using the [JSON Lines][7]
-format).
-
-## Attestation Limits
-
-### Subject Limits
-
-No more than 2500 subjects can be attested at the same time. Subjects will be
-processed in batches 50. After the initial group of 50, each subsequent batch
-will incur an exponentially increasing amount of delay (capped at 1 minute of
-delay per batch) to avoid overwhelming the attestation API.
-
-## Examples
-
-### Identify Subject by Path
-
-For the basic use case, simply add the `attest-build-provenance` action to your
-workflow and supply the path to the artifact for which you want to generate
-attestation.
-
-```yaml
-name: build-attest
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    permissions:
-      id-token: write
-      contents: read
-      attestations: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build artifact
-        run: make my-app
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: '${{ github.workspace }}/my-app'
-```
-
-### Identify Multiple Subjects
-
-If you are generating multiple artifacts, you can generate a provenance
-attestation for each by using a wildcard in the `subject-path` input.
-
-```yaml
-- uses: actions/attest-build-provenance@v1
-  with:
-    subject-path: 'dist/**/my-bin-*'
-```
-
-For supported wildcards along with behavior and documentation, see
-[@actions/glob][8] which is used internally to search for files.
-
-Alternatively, you can explicitly list multiple subjects with either a comma or
-newline delimited list:
-
-```yaml
-- uses: actions/attest-build-provenance@v1
-  with:
-    subject-path: 'dist/foo, dist/bar'
-```
-
-```yaml
-- uses: actions/attest-build-provenance@v1
-  with:
-    subject-path: |
-      dist/foo
-      dist/bar
-```
-
-### Container Image
-
-When working with container images you can invoke the action with the
-`subject-name` and `subject-digest` inputs.
-
-If you want to publish the attestation to the container registry with the
-`push-to-registry` option, it is important that the `subject-name` specify the
-fully-qualified image name (e.g. "ghcr.io/user/app" or
-"acme.azurecr.io/user/app"). Do NOT include a tag as part of the image name --
-the specific image being attested is identified by the supplied digest.
-
-Attestation bundles are stored in the OCI registry according to the [Cosign
-Bundle Specification][10].
-
-> **NOTE**: When pushing to Docker Hub, please use "index.docker.io" as the
-> registry portion of the image name.
-
-```yaml
-name: build-attested-image
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      packages: write
-      contents: read
-      attestations: write
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push image
-        id: push
-        uses: docker/build-push-action@v5.0.0
-        with:
-          context: .
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        id: attest
-        with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
-```
+Documentation for previous versions of this action can be found
+[here](https://github.com/actions/attest-build-provenance/blob/v3.2.0/README.md).
 
 [1]: https://github.com/actions/toolkit/tree/main/packages/attest
 [2]: https://github.com/in-toto/attestation/tree/main/spec/v1
@@ -237,9 +50,5 @@ jobs:
 [4]: https://www.sigstore.dev/
 [5]: https://cli.github.com/manual/gh_attestation_verify
 [6]:
-  https://github.com/sigstore/protobuf-specs/blob/main/protos/sigstore_bundle.proto
-[7]: https://jsonlines.org/
-[8]: https://github.com/actions/toolkit/tree/main/packages/glob#patterns
-[9]:
   https://docs.github.com/en/actions/security-guides/using-artifact-attestations-to-establish-provenance-for-builds
-[10]: https://github.com/sigstore/cosign/blob/main/specs/BUNDLE_SPEC.md
+[7]: https://github.com/actions/attest
